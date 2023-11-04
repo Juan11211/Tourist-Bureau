@@ -104,8 +104,89 @@ let activities = [
 window.onload = function(e){
     e.preventDefault();
 
+    // select form already loaded
     initStateDrop();
 
-    
+    // handle the onchange for form
+    const selectForm = document.getElementById("selectForm");
+    selectForm.onchange = selectedValue;
+}
+
+
+// function loads when webpage loads -- 
+function initStateDrop(){
+
+    // define selectId - 
+    const selectActivity = document.getElementById("selectActivity");
+
+    // define and set new option 
+    let defaultOption = new Option("Select One");
+    selectActivity.appendChild(defaultOption);
+
+    // loop through categories and display each one. 
+    for(let i = 0; i < categories.length; i++){
+        let option = new Option(categories[i]);
+        selectActivity.appendChild(option);
+    }
 
 }
+
+// step 2 - show dropdown value is selected
+function selectedValue(){
+
+    
+   let selectActivity = document.getElementById("selectActivity").value;
+
+   const activitiesPicked = []
+
+   for(let i = 0; i < activities.length; i++){
+    if(activities[i].category === selectActivity){
+        activitiesPicked.push(activities[i])
+    }
+   }
+
+   displayMatchingActivities(activitiesPicked);
+
+}
+
+
+function displayMatchingActivities(activitiesPicked) {
+    const activitiesContainer = document.getElementById("activitiesContainer");
+    activitiesContainer.innerHTML = ""; // Clear previous content
+
+    // Create a div with the activity info for each activity
+    for (const activity of activitiesPicked) {
+        const activityElement = document.createElement("div");
+        activityElement.innerHTML = `
+            <h2>${activity.name}</h2>
+            <p>${activity.description}</p>
+            <p>Location: ${activity.location}</p>
+            <p>Price: $${activity.price.toFixed(2)}</p>
+        `;
+
+        // Check if the price is greater than 0
+        if (activity.price > 0) {
+            // If price is greater than 0, add a "Buy Ticket" button
+            const buyTicketButton = document.createElement("button");
+            buyTicketButton.classList.add("btn", "btn-dark", "buyTicket");
+            buyTicketButton.innerText = "Buy E Ticket";
+            activityElement.appendChild(buyTicketButton);
+
+            // Add an event listener to the button
+            buyTicketButton.onclick = function () {
+                ticketBtnClicked(activity);
+            };
+        }
+
+        activitiesContainer.appendChild(activityElement);
+    }
+}
+
+function ticketBtnClicked(price){
+    if (activity.price > 0) {
+
+    }
+ 
+}
+
+
