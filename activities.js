@@ -101,92 +101,62 @@ let activities = [
     }
 ];
 
-window.onload = function(e){
-    e.preventDefault();
 
-    // select form already loaded
-    initStateDrop();
+window.onload = function(){
+    // Initialize category dropdown
+    initialDropDown();
 
-    // handle the onchange for form
-    const selectForm = document.getElementById("selectForm");
-    selectForm.onchange = selectedValue;
+    // Set the onchange event for the category dropdown when page loads -- pass in selectedCat func
+    document.getElementById("categoryDropdown").onchange = function() {
+        selectedCategory();
+    };
 }
 
-
-// function loads when webpage loads -- 
-function initStateDrop(){
-
-    // define selectId - 
-    const selectActivity = document.getElementById("selectActivity");
-
-    // define and set new option 
-    let defaultOption = new Option("Select One");
-    selectActivity.appendChild(defaultOption);
-
-    // loop through categories and display each one. 
+function initialDropDown(){
+    const category = document.getElementById("categoryDropdown");
+    // adding a default option
+    let defaultCategoryOption = new Option("Select One");
+    category.appendChild(defaultCategoryOption);
+    // loop through the categories
     for(let i = 0; i < categories.length; i++){
-        let option = new Option(categories[i]);
-        selectActivity.appendChild(option);
+        let categoryOption = new Option(categories[i]);
+        category.appendChild(categoryOption);
     }
-
-}
-
-// step 2 - show dropdown value is selected
-function selectedValue(){
-
-    
-   let selectActivity = document.getElementById("selectActivity").value;
-
-   const activitiesPicked = []
-
-   for(let i = 0; i < activities.length; i++){
-    if(activities[i].category === selectActivity){
-        activitiesPicked.push(activities[i])
-    }
-   }
-
-   displayMatchingActivities(activitiesPicked);
-
 }
 
 
-function displayMatchingActivities(activitiesPicked) {
-    const activitiesContainer = document.getElementById("activitiesContainer");
-    activitiesContainer.innerHTML = ""; // Clear previous content
+function selectedCategory() {
+    // Grabbing the dropdown value
+    let category = document.getElementById("categoryDropdown").value;
 
-    // Create a div with the activity info for each activity
-    for (const activity of activitiesPicked) {
-        const activityElement = document.createElement("div");
-        activityElement.innerHTML = `
-            <h2>${activity.name}</h2>
-            <p>${activity.description}</p>
-            <p>Location: ${activity.location}</p>
-            <p>Price: $${activity.price.toFixed(2)}</p>
-        `;
+    // Define the activity dropdown
+    const activityDropdown = document.getElementById("activityDropdown");
 
-        // Check if the price is greater than 0
-        if (activity.price > 0) {
-            // If price is greater than 0, add a "Buy Ticket" button
-            const buyTicketButton = document.createElement("button");
-            buyTicketButton.classList.add("btn", "btn-dark", "buyTicket");
-            buyTicketButton.innerText = "Buy E Ticket";
-            activityElement.appendChild(buyTicketButton);
 
-            // Add an event listener to the button
-            buyTicketButton.onclick = function () {
-                ticketBtnClicked(activity);
-            };
+// Clear existing options
+  activityDropdown.innerHTML = "";
+
+  if (selectedCategory === "Select one") return;
+  
+    // Set the default "Select One" option in the activity dropdown
+    let defaultActivity = new Option("Select One");
+    activityDropdown.appendChild(defaultActivity);
+
+    // Populate the activity dropdown with activities matching the selected category
+    for (let i = 0; i < activities.length; i++) {
+        if (activities[i].category === category) {
+            let activityOption = new Option(activities[i].name, activities[i].id);
+            activityDropdown.appendChild(activityOption);
         }
-
-        activitiesContainer.appendChild(activityElement);
     }
+  
 }
 
-function ticketBtnClicked(price){
-    if (activity.price > 0) {
 
-    }
- 
-}
+
+
+
+
+
 
 
