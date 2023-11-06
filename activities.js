@@ -102,61 +102,115 @@ let activities = [
 ];
 
 
-window.onload = function(){
+// window.onload = function(){
+//     // Initialize category dropdown
+//     initialDropDown();
+
+//     // Set the onchange event for the category dropdown when page loads -- pass in selectedCat func
+//     document.getElementById("categoryDropdown").onchange = function() {
+//         selectedCategory();
+//     };
+// }
+
+// function initialDropDown(){
+//     const category = document.getElementById("categoryDropdown");
+//     // adding a default option
+//     let defaultCategoryOption = new Option("Select One");
+//     category.appendChild(defaultCategoryOption);
+//     // loop through the categories
+//     for(let i = 0; i < categories.length; i++){
+//         let categoryOption = new Option(categories[i]);
+//         category.appendChild(categoryOption);
+//     }
+// }
+
+
+// function selectedCategory() {
+//     // Grabbing the dropdown value
+//     let category = document.getElementById("categoryDropdown").value;
+
+//     // Define the activity dropdown
+//     const activityDropdown = document.getElementById("activityDropdown");
+
+
+// // Clear existing options
+//   activityDropdown.innerHTML = "";
+
+//   if (selectedCategory === "Select one") return;
+
+//     // Set the default "Select One" option in the activity dropdown
+//     let defaultActivity = new Option("Select One");
+//     activityDropdown.appendChild(defaultActivity);
+
+//     // Populate the activity dropdown with activities matching the selected category
+//     for (let i = 0; i < activities.length; i++) {
+//         if (activities[i].category === category) {
+//             let activityOption = new Option(activities[i].name, activities[i].id);
+//             activityDropdown.appendChild(activityOption);
+//         }
+//     }
+  
+// }
+
+window.onload = function () {
     // Initialize category dropdown
     initialDropDown();
 
-    // Set the onchange event for the category dropdown when page loads -- pass in selectedCat func
-    document.getElementById("categoryDropdown").onchange = function() {
+    // Set the onchange event for the category dropdown when the page loads
+    document.getElementById("categoryDropdown").onchange = function () {
         selectedCategory();
     };
-}
+};
 
-function initialDropDown(){
-    const category = document.getElementById("categoryDropdown");
-    // adding a default option
+function initialDropDown() {
+    const categoryDropdown = document.getElementById("categoryDropdown");
+
+    // Adding a default option
     let defaultCategoryOption = new Option("Select One");
-    category.appendChild(defaultCategoryOption);
-    // loop through the categories
-    for(let i = 0; i < categories.length; i++){
+    categoryDropdown.appendChild(defaultCategoryOption);
+
+    for (let i = 0; i < categories.length; i++) {
         let categoryOption = new Option(categories[i]);
-        category.appendChild(categoryOption);
+        categoryDropdown.appendChild(categoryOption);
     }
+
+    // // Loop through the categories using 'let category of categories' // for.of
+    // for (let category of categories) {
+    //     let categoryOption = new Option(category);
+    //     categoryDropdown.appendChild(categoryOption);
+    // }
 }
-
-
 function selectedCategory() {
     // Grabbing the dropdown value
     let category = document.getElementById("categoryDropdown").value;
 
-    // Define the activity dropdown
+    // Define the activity dropdown and activityDetails elements
     const activityDropdown = document.getElementById("activityDropdown");
+    const activityDetails = document.getElementById("activity-details");
 
+    // Clear existing content in the details div
+    activityDetails.innerHTML = "";
 
-// Clear existing options
-  activityDropdown.innerHTML = "";
+    // Clear the activity dropdown
+    activityDropdown.innerHTML = "";
 
-  if (selectedCategory === "Select one") return;
-  
-    // Set the default "Select One" option in the activity dropdown
-    let defaultActivity = new Option("Select One");
-    activityDropdown.appendChild(defaultActivity);
+    if (category === "Select One") {
+        // Set the default "Select One" option in the activity dropdown
+        let defaultActivity = new Option("Select One");
+        activityDropdown.appendChild(defaultActivity);
+    } else {
+        // Set a default "Select One" option for activities
+        let defaultActivity = new Option("Select One");
+        activityDropdown.appendChild(defaultActivity);
 
-    // Populate the activity dropdown with activities matching the selected category
-    for (let i = 0; i < activities.length; i++) {
-        if (activities[i].category === category) {
-            let activityOption = new Option(activities[i].name, activities[i].id);
-            activityDropdown.appendChild(activityOption);
+        // Populate the activity dropdown with activities matching the selected category
+        for (let i = 0; i < activities.length; i++) {
+            if (activities[i].category === category) {
+                let activityOption = new Option(activities[i].name, activities[i].id);
+                activityDropdown.appendChild(activityOption);
+            }
         }
     }
-  
 }
-
-
-
-
-
-
-
 
 
