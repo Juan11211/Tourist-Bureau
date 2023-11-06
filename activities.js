@@ -178,9 +178,9 @@ function displayActivityDetails(activityId) {
         // Display activity details on the page
         activityDetails.innerHTML = `
             <h2>${selectedActivity.name}</h2>
-            <p><strong>Description:</strong> ${selectedActivity.description}</p>
-            <p><strong>Location:</strong> ${selectedActivity.location}</p>
-            <p><strong>Price:</strong> $${selectedActivity.price.toFixed(2)}</p>
+            <p>Description: ${selectedActivity.description}</p>
+            <p>Location:${selectedActivity.location}</p>
+            <p>Price: $${selectedActivity.price.toFixed(2)}</p>
         `;
 
         // If the price is greater than 0.00, show the e-ticket purchase form
