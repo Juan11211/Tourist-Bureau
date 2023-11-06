@@ -101,57 +101,6 @@ let activities = [
     }
 ];
 
-
-// window.onload = function(){
-//     // Initialize category dropdown
-//     initialDropDown();
-
-//     // Set the onchange event for the category dropdown when page loads -- pass in selectedCat func
-//     document.getElementById("categoryDropdown").onchange = function() {
-//         selectedCategory();
-//     };
-// }
-
-// function initialDropDown(){
-//     const category = document.getElementById("categoryDropdown");
-//     // adding a default option
-//     let defaultCategoryOption = new Option("Select One");
-//     category.appendChild(defaultCategoryOption);
-//     // loop through the categories
-//     for(let i = 0; i < categories.length; i++){
-//         let categoryOption = new Option(categories[i]);
-//         category.appendChild(categoryOption);
-//     }
-// }
-
-
-// function selectedCategory() {
-//     // Grabbing the dropdown value
-//     let category = document.getElementById("categoryDropdown").value;
-
-//     // Define the activity dropdown
-//     const activityDropdown = document.getElementById("activityDropdown");
-
-
-// // Clear existing options
-//   activityDropdown.innerHTML = "";
-
-//   if (selectedCategory === "Select one") return;
-
-//     // Set the default "Select One" option in the activity dropdown
-//     let defaultActivity = new Option("Select One");
-//     activityDropdown.appendChild(defaultActivity);
-
-//     // Populate the activity dropdown with activities matching the selected category
-//     for (let i = 0; i < activities.length; i++) {
-//         if (activities[i].category === category) {
-//             let activityOption = new Option(activities[i].name, activities[i].id);
-//             activityDropdown.appendChild(activityOption);
-//         }
-//     }
-  
-// }
-
 window.onload = function () {
     // Initialize category dropdown
     initialDropDown();
@@ -174,32 +123,38 @@ function initialDropDown() {
         categoryDropdown.appendChild(categoryOption);
     }
 
-    // // Loop through the categories using 'let category of categories' // for.of
+    //  for...of loop 
     // for (let category of categories) {
     //     let categoryOption = new Option(category);
     //     categoryDropdown.appendChild(categoryOption);
     // }
 }
+
 function selectedCategory() {
-    // Grabbing the dropdown value
+    // Grabbing the selected category from the dropdown
     let category = document.getElementById("categoryDropdown").value;
 
     // Define the activity dropdown and activityDetails elements
     const activityDropdown = document.getElementById("activityDropdown");
     const activityDetails = document.getElementById("activity-details");
 
-    // Clear existing content in the details div
+     // event listener for activityDropdown, 
+     activityDropdown.onchange = function () {
+        displayActivityDetails(activityDropdown.value);
+    };
+
+    // clear content in the details div
     activityDetails.innerHTML = "";
 
-    // Clear the activity dropdown
-    activityDropdown.innerHTML = "";
+    // clear the activity dropdown
+     activityDropdown.innerHTML = "";
 
     if (category === "Select One") {
-        // Set the default "Select One" option in the activity dropdown
+        // set the default "Select One" option in the activity dropdown
         let defaultActivity = new Option("Select One");
         activityDropdown.appendChild(defaultActivity);
     } else {
-        // Set a default "Select One" option for activities
+        // we want the user to have a clear starting point
         let defaultActivity = new Option("Select One");
         activityDropdown.appendChild(defaultActivity);
 
@@ -212,5 +167,62 @@ function selectedCategory() {
         }
     }
 }
+
+function displayActivityDetails(activityId) {
+    const activityDetails = document.getElementById("activity-details");
+
+    // Find the selected activity by its ID
+    const selectedActivity = activities.find((activity) => activity.id === activityId);
+
+    if (selectedActivity) {
+        // Display activity details on the page
+        activityDetails.innerHTML = `
+            <h2>${selectedActivity.name}</h2>
+            <p><strong>Description:</strong> ${selectedActivity.description}</p>
+            <p><strong>Location:</strong> ${selectedActivity.location}</p>
+            <p><strong>Price:</strong> $${selectedActivity.price.toFixed(2)}</p>
+        `;
+
+        // If the price is greater than 0.00, show the e-ticket purchase form
+        if (selectedActivity.price > 0.00) {
+            activityDetails.innerHTML += `
+                <h3>Buy E-Tickets</h3>
+                <form id="purchaseForm">
+                    <label for="numTickets">Number of Tickets:</label>
+                    <input type="number" id="numTickets" required>
+                    
+                    <label for="creditCard">Credit Card Number:</label>
+                    <input type="text" id="creditCard" required>
+                    
+                    <label for="email">Email Address:</label>
+                    <input type="email" id="email" required>
+                    
+                    <button type="submit" id="purchaseButton">Purchase</button>
+                    <button type="reset">Reset</button>
+                </form>
+                <div id="purchaseMessage"></div>
+            `;
+
+            // Add an event listener for the purchase form
+            const purchaseForm = document.getElementById("purchaseForm");
+            purchaseForm.onsubmit = function (event) {
+                event.preventDefault();
+
+                const numTickets = document.getElementById("numTickets").value;
+                const creditCard = document.getElementById("creditCard").value;
+                const email = document.getElementById("email").value;
+
+
+                // Display a purchase confirmation message
+                const purchaseMessage = document.getElementById("purchaseMessage");
+                purchaseMessage.innerHTML = `
+                    Your credit card has been charged $${(selectedActivity.price * numTickets).toFixed(2)} for ${numTickets} to ${selectedActivity.name}. 
+                    A confirmation email has been sent to ${email}.
+                `;
+            };
+        }
+    }
+}
+
 
 
