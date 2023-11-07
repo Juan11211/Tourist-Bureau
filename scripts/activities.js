@@ -109,12 +109,41 @@ window.onload = function () {
     document.getElementById("categoryDropdown").onchange = function () {
         selectedCategory();
     };
+
+    // Set the onchange event for the activity dropdown
+    document.getElementById("activityDropdown").onchange = function () {
+        const selectedActivityId = document.getElementById("activityDropdown").value;
+        if (selectedActivityId !== "Select One") {
+            displayActivityDetails(selectedActivityId);
+        }
+    };
+
+    // Set the onsubmit event for the purchase form
+    document.getElementById("purchaseForm").onsubmit = function (event) {
+        event.preventDefault();
+
+        const numTickets = document.getElementById("numTickets").value;
+        const creditCard = document.getElementById("creditCard").value;
+        const email = document.getElementById("email").value;
+
+        // Handle the purchase logic
+
+        // Display a purchase confirmation message
+        const purchaseMessage = document.getElementById("purchaseMessage");
+        purchaseMessage.style.display = "block"; // Display the message
+        purchaseMessage.innerHTML = `
+            Your credit card has been charged $${(
+                selectedActivity.price * numTickets
+            ).toFixed(2)} for ${numTickets} to ${selectedActivity.name}. 
+            A confirmation email has been sent to ${email}.
+        `;
+    };
 };
 
 function initialDropDown() {
     const categoryDropdown = document.getElementById("categoryDropdown");
 
-    // Adding a default option
+    // Adding a default "Select One" option for categories
     let defaultCategoryOption = new Option("Select One");
     categoryDropdown.appendChild(defaultCategoryOption);
 
@@ -122,12 +151,6 @@ function initialDropDown() {
         let categoryOption = new Option(categories[i]);
         categoryDropdown.appendChild(categoryOption);
     }
-
-    //  for...of loop 
-    // for (let category of categories) {
-    //     let categoryOption = new Option(category);
-    //     categoryDropdown.appendChild(categoryOption);
-    // }
 }
 
 function selectedCategory() {
@@ -138,33 +161,29 @@ function selectedCategory() {
     const activityDropdown = document.getElementById("activityDropdown");
     const activityDetails = document.getElementById("activity-details");
 
-     // event listener for activityDropdown, 
-     activityDropdown.onchange = function () {
-        displayActivityDetails(activityDropdown.value);
-    };
+    // Adding a default "Select One" option for activities
+    activityDropdown.innerHTML = ""; // Clear the activity dropdown
+    let defaultActivityOption = new Option("Select One");
+    activityDropdown.appendChild(defaultActivityOption);
 
-    // clear content in the details div
+    // Clear content in the details div
     activityDetails.innerHTML = "";
 
-    // clear the activity dropdown
-     activityDropdown.innerHTML = "";
-
-    if (category === "Select One") {
-        // set the default "Select One" option in the activity dropdown
-        let defaultActivity = new Option("Select One");
-        activityDropdown.appendChild(defaultActivity);
-    } else {
-        // we want the user to have a clear starting point
-        let defaultActivity = new Option("Select One");
-        activityDropdown.appendChild(defaultActivity);
-
+    if (category !== "Select One") {
         // Populate the activity dropdown with activities matching the selected category
         for (let i = 0; i < activities.length; i++) {
             if (activities[i].category === category) {
-                let activityOption = new Option(activities[i].name, activities[i].id);
+                let activityOption = new Option(
+                    activities[i].name,
+                    activities[i].id
+                );
                 activityDropdown.appendChild(activityOption);
             }
         }
+
+        // Clear and hide the purchase form when the category changes
+        const purchaseForm = document.getElementById("purchaseForm");
+        purchaseForm.style.display = "none";
     }
 }
 
@@ -172,57 +191,29 @@ function displayActivityDetails(activityId) {
     const activityDetails = document.getElementById("activity-details");
 
     // Find the selected activity by its ID
-    const selectedActivity = activities.find((activity) => activity.id === activityId);
+    let selectedActivity = null;
+    for (let i = 0; i < activities.length; i++) {
+        if (activities[i].id === activityId) {
+            selectedActivity = activities[i];
+            break;
+        }
+    }
 
     if (selectedActivity) {
-        // Display activity details on the page
         activityDetails.innerHTML = `
             <h2>${selectedActivity.name}</h2>
             <p>Description: ${selectedActivity.description}</p>
-            <p>Location:${selectedActivity.location}</p>
-            <p>Price: $${selectedActivity.price.toFixed(2)}</p>
-        `;
+            <p>Location: ${selectedActivity.location}</p>
+            <p>Price: $${selectedActivity.price.toFixed(2)}</p>`;
 
-        // If the price is greater than 0.00, show the e-ticket purchase form
+        const purchaseForm = document.getElementById("purchaseForm");
+
         if (selectedActivity.price > 0.00) {
-            activityDetails.innerHTML += `
-                <h3>Buy E-Tickets</h3>
-                <form id="purchaseForm">
-                    <label for="numTickets">Number of Tickets:</label>
-                    <input type="number" id="numTickets" required>
-                    
-                    <label for="creditCard">Credit Card Number:</label>
-                    <input type="text" id="creditCard" required>
-                    
-                    <label for="email">Email Address:</label>
-                    <input type="email" id="email" required>
-                    
-                    <button type="submit" id="purchaseButton">Purchase</button>
-                    <button type="reset">Reset</button>
-                </form>
-                <div id="purchaseMessage"></div>
-            `;
-
-            // Add an event listener for the purchase form
-            const purchaseForm = document.getElementById("purchaseForm");
-            purchaseForm.onsubmit = function (event) {
-                event.preventDefault();
-
-                const numTickets = document.getElementById("numTickets").value;
-                const creditCard = document.getElementById("creditCard").value;
-                const email = document.getElementById("email").value;
-
-
-                // Display a purchase confirmation message
-                const purchaseMessage = document.getElementById("purchaseMessage");
-                purchaseMessage.innerHTML = `
-                    Your credit card has been charged $${(selectedActivity.price * numTickets).toFixed(2)} for ${numTickets} to ${selectedActivity.name}. 
-                    A confirmation email has been sent to ${email}.
-                `;
-            };
+            purchaseForm.style.display = "block"; // Display the form
+        } else {
+            purchaseForm.style.display = "none"; // Hide the form
         }
     }
 }
-
 
 
