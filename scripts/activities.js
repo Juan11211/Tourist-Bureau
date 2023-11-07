@@ -126,7 +126,7 @@ window.onload = function () {
         const creditCard = document.getElementById("creditCard").value;
         const email = document.getElementById("email").value;
 
-        // Handle the purchase logic
+       
 
         // Display a purchase confirmation message
         const purchaseMessage = document.getElementById("purchaseMessage");
@@ -161,8 +161,8 @@ function selectedCategory() {
     const activityDropdown = document.getElementById("activityDropdown");
     const activityDetails = document.getElementById("activity-details");
 
-    // Adding a default "Select One" option for activities
-    activityDropdown.innerHTML = ""; // Clear the activity dropdown
+    // Adding a default "Select One" option for activities, Clear the activity dropdown
+    activityDropdown.innerHTML = ""; 
     let defaultActivityOption = new Option("Select One");
     activityDropdown.appendChild(defaultActivityOption);
 
